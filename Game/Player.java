@@ -46,15 +46,15 @@ public class Player extends Parent{
         // so we can do anything needed in here to update the state of the player.
         // prevent the player from moving off the edge of the board sideways
         if (getPos().x < 0) {
-            getPos().x = 0;
+            getPos().x = Board.COLUMNS-1;
         } else if (getPos().x >= Board.COLUMNS) {
-            getPos().x = Board.COLUMNS - 1;
+            getPos().x = 0;
         }
         // prevent the player from moving off the edge of the board vertically
         if (getPos().y < 0) {
-            getPos().y = 0;
+            getPos().y = Board.ROWS-1;
         } else if (getPos().y >= Board.ROWS) {
-            getPos().y = Board.ROWS - 1;
+            getPos().y = 0;
         }
     }
 

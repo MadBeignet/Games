@@ -225,6 +225,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
         // remove collected coins from the board
         coins.removeAll(collectedCoins);
+        
+        
         if (coins.size() < NUM_COINS && !counts.isEmpty() && counts.peek().getCount() >= MAX_COUNT) {
             addCoin();
             counts.poll();
@@ -233,6 +235,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 co.updateCount();
             }
         }
+        // restart the game if score >= 5000
+        if (Integer.valueOf(player.getScore()) >= 5000) {
+            coins.clear();
+            reset();
+        }
+    }
+    public void reset() {
+        player = new Player();
+        coins = populateCoins();
     }
 
     private void addCoin() {
@@ -270,30 +281,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
         coins.add(c);
     }
-    /*
-    public void addSpecialCoin() {
-        Random rand = new Random();
-        int coinX, coinY;
-        ArrayList<Boolean> bool = new ArrayList<Boolean>();
-        boolean matches = true;
-        SpecialCoin c = new SpecialCoin(0,0);
-        while (matches) { // this whole thing makes sure the coins don't overlap
-            coinX = rand.nextInt(COLUMNS);
-            coinY = rand.nextInt(ROWS);
-            c = new SpecialCoin(coinX, coinY);
-            for (Coin coin : coins) {
-                if (coin.getPos().equals(c.getPos())) {
-                    bool.add(true);
-                    break;
-                } else 
-                    bool.add(false);
-            }
-            matches = bool.contains(true);
-            bool.clear();
-        } 
-        coins.add(c);
-    }
-    */
 
     private void updateCoins() {
         ArrayList<Coin> timedOutCoins = new ArrayList<Coin>();
