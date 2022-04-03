@@ -18,8 +18,10 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     public static final int COLUMNS = 18;
     // controls how many coins appear on the board
     public static final int NUM_COINS = 5;
-    
+    // this is the delay for coins to respawn onto the board after being collected or disappearing
     private static final int MAX_COUNT = 100;
+    // this is the max score
+    private static final int MAX_SCORE = 3000;
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
     
@@ -30,7 +32,6 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     // objects that appear on the game board
     private Player player;
     public ArrayList<Coin> coins;
-    private int count = 0;
     private Queue<Count> counts = new LinkedList<Count>();
     
 
@@ -165,11 +166,11 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         // create the given number of coins in random positions on the board.
         // note that there is not check here to prevent two coins from occupying the same NOW THERE IS
         // spot, nor to prevent coins from spawning in the same spot as the player EXCEPT FOR THE PLAYER
-        for (int i = 0; i < NUM_COINS; i++) {
+        for (int i = 0; i < NUM_COINS - 1; i++) {
             int coinX, coinY;
             boolean matches = true;
             Coin c = new Coin(0,0);
-           
+            
             while (matches) {
                 coinX = rand.nextInt(COLUMNS);
                 coinY = rand.nextInt(ROWS);
@@ -187,27 +188,47 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             } 
             coinList.add(c);
         }
+        Count coun = new Count();
+        coun.makeSpecial();
+        counts.add(coun);
         return coinList;
     }
 
     private void collectCoins() {
-        // allow player to pickup coins
+        // allow player to pickup coins)
         ArrayList<Coin> collectedCoins = new ArrayList<>();
         for (Coin coin : coins) {
             // if the player is on the same tile as a coin, collect it
             if (player.getPos().equals(coin.getPos())) {
+                
                 // give the player some points for picking this up
-                player.addScore(100);
+                player.addScore(coin.getValue());
                 collectedCoins.add(coin);
-                counts.add(new Count());  
+                Count coun = new Count();
+                /*
+                boolean special = false;
+                for (Coin co : coins) {
+                    if (co.isSpecial())
+                        special = true;
+                }
+                for (Count co : counts) {
+                    if (co.getSpecial())
+                        special = true;
+                }*/
+                if (coin.getValue() == 500) {
+                    coun.makeSpecial();
+                    counts.add(coun);
+                } 
+                else   
+                    counts.add(coun);
             }
         }
         // remove collected coins from the board
         coins.removeAll(collectedCoins);
         if (coins.size() < NUM_COINS && !counts.isEmpty() && counts.peek().getCount() >= MAX_COUNT) {
-            addCoin(); // adds missing coin
+            addCoin();
             counts.poll();
-        } else if (coins.size() < NUM_COINS && count < MAX_COUNT) {
+        } else if (coins.size() < NUM_COINS && !counts.isEmpty() && counts.peek().getCount() < MAX_COUNT) {
             for (Count co : counts) {
                 co.updateCount();
             }
@@ -233,19 +254,73 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             }
             matches = bool.contains(true);
             bool.clear();
+        }
+        boolean special = false;
+        for (Coin coin : coins) {
+            if (coin.isSpecial())
+                special = true;
+        }
+        for (Count couns : counts) {
+            if (couns.getSpecial())
+                special = true;
+        }
+        if (!special) {
+            c.makeSpecial();
+            System.out.println("made a special coin!");
+        }
+        coins.add(c);
+    }
+    /*
+    public void addSpecialCoin() {
+        Random rand = new Random();
+        int coinX, coinY;
+        ArrayList<Boolean> bool = new ArrayList<Boolean>();
+        boolean matches = true;
+        SpecialCoin c = new SpecialCoin(0,0);
+        while (matches) { // this whole thing makes sure the coins don't overlap
+            coinX = rand.nextInt(COLUMNS);
+            coinY = rand.nextInt(ROWS);
+            c = new SpecialCoin(coinX, coinY);
+            for (Coin coin : coins) {
+                if (coin.getPos().equals(c.getPos())) {
+                    bool.add(true);
+                    break;
+                } else 
+                    bool.add(false);
+            }
+            matches = bool.contains(true);
+            bool.clear();
         } 
         coins.add(c);
     }
+    */
 
     private void updateCoins() {
         ArrayList<Coin> timedOutCoins = new ArrayList<Coin>();
         for (Coin c : coins) {
             c.updateCount();
             if (c.getTimeOut()) {
+                Count coun = new Count();
                 timedOutCoins.add(c);
-                counts.add(new Count());
+                boolean special = false;
+                System.out.println("COINS:");
+                for (Coin co : coins) {
+                    System.out.println(co.isSpecial());
+                    if (co.isSpecial())
+                        special = true;
+                }
+                System.out.println("COUNTS");
+                for (Count co : counts) {
+                    System.out.println(co.getSpecial());
+                    if (co.getSpecial())   
+                        special = true;
+                }
+                if (!special) 
+                    coun.makeSpecial();
+                counts.add(coun);
             }
         }
         coins.removeAll(timedOutCoins);
     }
+
 }
