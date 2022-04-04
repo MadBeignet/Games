@@ -141,7 +141,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         g2d.drawString(text, x, metrics.getHeight());
     }
     private void drawMaxScore(Graphics g) {
-        String maxScore = "Max Score: " + String.valueOf(getMaxScore());
+        String maxScore = "High Score: " + String.valueOf(getMaxScore());
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setColor(new Color(237, 133, 155));
