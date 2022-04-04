@@ -1,17 +1,15 @@
 package Game;
 
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.awt.Point;
 
 
 public class Player extends Parent{
 
     // image that represents the player's position on the board
     // current position of the player on the board grid
-    private Point pos;
     // keep track of the player's score
     private int score;
+    private Count count;
 
     public Player() {
         super("Game/images/player.png",0,0);
@@ -19,6 +17,7 @@ public class Player extends Parent{
 
         // initialize the state
         score = 0;
+        count = new Count();
     }
     
     public void keyPressed(KeyEvent e) {
@@ -56,6 +55,8 @@ public class Player extends Parent{
         } else if (getPos().y >= Board.ROWS) {
             getPos().y = 0;
         }
+        count.updateCount();
+        
     }
 
     public String getScore() {
@@ -64,6 +65,10 @@ public class Player extends Parent{
 
     public void addScore(int amount) {
         score += amount;
+    }
+
+    public int getCount() {
+        return count.getCount();
     }
 
 }

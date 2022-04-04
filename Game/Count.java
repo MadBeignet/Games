@@ -4,7 +4,7 @@ public class Count {
 
     private int count;
     private boolean isSpecial = false;
-    private int maxCoolDown = 100;
+    
 
 
     public Count() {
@@ -21,7 +21,6 @@ public class Count {
     }
     public void makeSpecial() {
         isSpecial = true;
-        maxCoolDown = 200;
     }
     
 }

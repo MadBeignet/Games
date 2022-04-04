@@ -7,6 +7,11 @@ import java.util.Random;
 import javax.swing.*;
 import java.util.Queue;
 import java.util.LinkedList;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Board extends JPanel implements ActionListener, KeyListener {
 
@@ -21,7 +26,8 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     // this is the delay for coins to respawn onto the board after being collected or disappearing
     private static final int MAX_COUNT = 100;
     // this is the max score
-    private static final int MAX_SCORE = 3000;
+    //private static final int MAX_SCORE = 3000;
+    private final int MAX_SECONDS = 30;
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
     
@@ -82,6 +88,9 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         // draw our graphics.
         drawBackground(g);
         drawScore(g);
+        drawMaxScore(g);
+        drawTimer(g);
+        
         for (Coin coin : coins) {
             coin.draw(g, this);
         }
@@ -105,6 +114,44 @@ public class Board extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // react to key up events
+    }
+    private String timeClock(int n) {
+        String numSeconds = String.valueOf(n%60);
+        String numMinutes = String.valueOf(n/60);
+        if (numSeconds.length() != 2) 
+            numSeconds = "0" + numSeconds;
+        if (numMinutes.length() != 2) 
+            numMinutes = "0" + numMinutes;
+        return numMinutes + ":" + numSeconds;
+    }
+
+    private void drawTimer(Graphics g) {
+        if (player.getCount()/40 >= MAX_SECONDS){
+            coins.clear();
+            reset();
+        }
+        String text = timeClock(MAX_SECONDS - player.getCount()/40);
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(new Color(0,0,0));
+        g2d.setFont(new Font("Lato", Font.BOLD, 25));
+        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
+        Rectangle rect = new Rectangle(0, TILE_SIZE * (ROWS - 1), TILE_SIZE * COLUMNS, TILE_SIZE);
+        int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+        g2d.drawString(text, x, metrics.getHeight());
+    }
+    private void drawMaxScore(Graphics g) {
+        String maxScore = "Max Score: " + String.valueOf(getMaxScore());
+        Graphics2D g2d = (Graphics2D) g;
+
+        g2d.setColor(new Color(237, 133, 155));
+        g2d.setFont(new Font("Lato", Font.BOLD, 25));
+        FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
+        Rectangle rect = new Rectangle(0, TILE_SIZE*(ROWS-1), TILE_SIZE*COLUMNS, TILE_SIZE);
+        int x = rect.x + rect.width - metrics.stringWidth(maxScore);
+        int y = metrics.getHeight();
+        g2d.drawString(maxScore, x, y);
+
     }
 
     private void drawBackground(Graphics g) {
@@ -236,12 +283,13 @@ public class Board extends JPanel implements ActionListener, KeyListener {
             }
         }
         // restart the game if score >= 5000
-        if (Integer.valueOf(player.getScore()) >= 5000) {
-            coins.clear();
-            reset();
-        }
+        //if (Integer.valueOf(player.getScore()) >= 5000) {
+        //    coins.clear();
+        //    reset();
+        //}
     }
     public void reset() {
+        writeScore(Integer.valueOf(player.getScore()));
         player = new Player();
         coins = populateCoins();
     }
@@ -277,7 +325,7 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
         if (!special) {
             c.makeSpecial();
-            System.out.println("made a special coin!");
+            //System.out.println("made a special coin!");
         }
         coins.add(c);
     }
@@ -290,15 +338,15 @@ public class Board extends JPanel implements ActionListener, KeyListener {
                 Count coun = new Count();
                 timedOutCoins.add(c);
                 boolean special = false;
-                System.out.println("COINS:");
+                //System.out.println("COINS:");
                 for (Coin co : coins) {
-                    System.out.println(co.isSpecial());
+                    //System.out.println(co.isSpecial());
                     if (co.isSpecial())
                         special = true;
                 }
-                System.out.println("COUNTS");
+                //System.out.println("COUNTS");
                 for (Count co : counts) {
-                    System.out.println(co.getSpecial());
+                    //System.out.println(co.getSpecial());
                     if (co.getSpecial())   
                         special = true;
                 }
@@ -309,5 +357,50 @@ public class Board extends JPanel implements ActionListener, KeyListener {
         }
         coins.removeAll(timedOutCoins);
     }
+
+    private int getMaxScore() {
+        int maxScore = 0;
+        try {
+            File f = new File("Game/scores.txt");
+            Scanner s = new Scanner(f);
+            if (s.hasNextInt())
+            maxScore = s.nextInt();
+            while (s.hasNextInt()) {
+                int next = s.nextInt();
+                if (next > maxScore)
+                    maxScore = next;
+                
+            }
+            s.close();
+            
+        } catch (IOException e) {
+
+        }
+        return maxScore;
+    }
+    private void writeScore(int num) {
+        String scores = readScores();
+        String score = String.valueOf(num) + "\n";
+        try {
+            Path fileName = Path.of("Game/scores.txt");
+            Files.writeString(fileName, scores + score); 
+        } catch (IOException e) {
+            System.out.println("Experienced an error!");
+        }
+    } 
+    private String readScores() {
+        String scores = "";
+        try {
+            File f = new File("game/scores.txt");
+            Scanner s = new Scanner(f);
+            while (s.hasNextLine())
+                scores+=s.nextLine() + "\n";
+            s.close();
+        } catch (IOException e) {
+
+        }
+        
+        return scores;
+    }  
 
 }
