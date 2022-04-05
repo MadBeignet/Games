@@ -1,4 +1,4 @@
-package Game;
+package Game.Game0;
 
 import java.awt.event.KeyEvent;
 
