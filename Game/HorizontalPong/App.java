@@ -1,11 +1,11 @@
-package Game.Game1;
+package Game.HorizontalPong;
 
 import javax.swing.*;
 
 class App {
 
     private static void initWindow() {
-        JFrame window = new JFrame("Soccer ????");
+        JFrame window = new JFrame("Pong but you can move horizontally");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Board board = new Board();
         window.add(board);

@@ -1,11 +1,11 @@
-package Game.Game1;
+package Game.ActualPong;
 
 import java.awt.Point;
 
 public class Ball {
 
-    private int velocityX;
-    private int velocityY;
+    private double velocityX;
+    private double velocityY;
     private Point pos;
     private int height;
     private int width;
@@ -18,22 +18,26 @@ public class Ball {
         pos = new Point((Board.COLUMNS * Board.TILE_SIZE-width)/2, (Board.ROWS*Board.TILE_SIZE - height)/2);
     }
 
-    public void setVelocityX(int v) {
+    public void setVelocityX(double v) {
         velocityX = v;
     }
-    public void setVelocityY(int v) {
+    public void setVelocityY(double v) {
         velocityY = v;
     }
     public void moveX() {
-        pos.translate(velocityX,0);
+        pos.translate((int)velocityX,0);
+        velocityX = (velocityX * 0.997);
+        //velocityX = Math.abs(velocityX) - 0.01 >= 0 ? (int) (Math.abs(velocityX)/velocityX * (Math.abs(velocityX) - 0.01)) : 0; 
     }
     public void moveY() {
-        pos.translate(0, velocityY);
+        pos.translate(0, (int) velocityY);
+        velocityY = (velocityY * 0.997);
+        //velocityY = Math.abs(velocityY) - 0.01 >= 0 ? (int) (Math.abs(velocityY)/velocityY * (Math.abs(velocityY) - 0.01)) : 0; 
     }
-    public int getVelocityX() {
+    public double getVelocityX() {
         return velocityX;
     }
-    public int getVelocityY() {
+    public double getVelocityY() {
         return velocityY;
     }
     public Point getPos() {

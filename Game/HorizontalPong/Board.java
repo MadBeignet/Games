@@ -1,18 +1,9 @@
-package Game.Game1;
+package Game.HorizontalPong;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.*;
-import java.util.Queue;
-import java.util.LinkedList;
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class Board extends JPanel implements ActionListener, KeyListener{
     
@@ -21,9 +12,9 @@ public class Board extends JPanel implements ActionListener, KeyListener{
     // tile size
     public static final int TILE_SIZE = 25;
     // #rows
-    public static final int ROWS = 36;
+    public static final int ROWS = 27;
     // #columns
-    public static final int COLUMNS = 64;
+    public static final int COLUMNS = 48;
     private final int PADDLE_HEIGHT = 100;
     private final int PADDLE_WIDTH = 50;
     public static final int VELOCITY = 5;

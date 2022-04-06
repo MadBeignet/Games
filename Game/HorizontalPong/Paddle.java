@@ -1,9 +1,8 @@
-package Game.Game1;
+package Game.HorizontalPong;
 
 import java.awt.event.KeyEvent;
 import java.awt.Point;
 import java.awt.*;
-import java.awt.event.*;
 
 public class Paddle {
     
