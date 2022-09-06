@@ -1,4 +1,4 @@
-package Game.ActualPong;
+package ActualPong;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,6 +19,7 @@ public class Board extends JPanel implements ActionListener, KeyListener{
     private final int PADDLE_HEIGHT = 100;
     private final int PADDLE_WIDTH = 20;
     public static final int VELOCITY = 10;
+    public static final int MAX_VELOCITY = 15;
     private int player1Score;
     private int player2Score;
     private boolean player1 = false;
@@ -179,6 +180,9 @@ public class Board extends JPanel implements ActionListener, KeyListener{
     private void hitBall() {
         // horizontal
         // leftPaddle right side
+        final double yVel = Math.abs(ball.getVelocityY() + 0.05*VELOCITY);
+        final double xVel = Math.abs(ball.getVelocityX() + 0.05*VELOCITY);
+
         if (leftPaddle.getPos().x + leftPaddle.getWidth() >= ball.getX() && leftPaddle.getPos().x + leftPaddle.getWidth() - ball.getWidth() <= ball.getX() && ball.getY() >= leftPaddle.getPos().y && ball.getY() <= leftPaddle.getPos().y + leftPaddle.getHeight()){
             ball.setVelocityX(VELOCITY*2 + ball.getVelocityX());
             ball.setVelocityY((int) (ball.getVelocityY() + 0.4 * leftPaddle.getVelocityY()));
@@ -210,7 +214,7 @@ public class Board extends JPanel implements ActionListener, KeyListener{
             ball.setVelocityY(-VELOCITY);
         // rightPaddle bottom
         if (rightPaddle.getPos().y + rightPaddle.getHeight() >= ball.getY() && rightPaddle.getPos().y + rightPaddle.getHeight() - ball.getHeight() <= ball.getY() && ball.getX() + ball.getWidth() >= rightPaddle.getPos().x && ball.getX() <= rightPaddle.getPos().x + rightPaddle.getWidth())
-            ball.setVelocityY(VELOCITY);
+            ball.setVelocityY(-ball.getVelocityY() - 0.05*VELOCITY);
         if (ball.getX() < 0) {
             player2 = true;
             player2Score++;

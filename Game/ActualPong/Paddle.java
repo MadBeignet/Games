@@ -1,4 +1,4 @@
-package Game.ActualPong;
+package ActualPong;
 
 import java.awt.event.KeyEvent;
 import java.awt.Point;

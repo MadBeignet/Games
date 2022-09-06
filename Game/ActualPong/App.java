@@ -1,4 +1,4 @@
-package Game.ActualPong;
+package ActualPong;
 
 import javax.swing.*;
 

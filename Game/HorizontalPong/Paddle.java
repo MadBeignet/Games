@@ -1,4 +1,4 @@
-package Game.HorizontalPong;
+package HorizontalPong;
 
 import java.awt.event.KeyEvent;
 import java.awt.Point;

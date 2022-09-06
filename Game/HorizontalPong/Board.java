@@ -1,4 +1,4 @@
-package Game.HorizontalPong;
+package HorizontalPong;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -182,9 +182,9 @@ public class Board extends JPanel implements ActionListener, KeyListener{
         } else if (ball.getX() + ball.getWidth() > COLUMNS*TILE_SIZE) {
             ball.setVelocityX(-VELOCITY);
         }
-        if (ball.getY() == 0)
+        if (ball.getY() <= 0)
             ball.setVelocityY(VELOCITY);
-        if (ball.getY() + ball.getHeight() == ROWS*TILE_SIZE)
+        if (ball.getY() + ball.getHeight() >= ROWS*TILE_SIZE)
             ball.setVelocityY(-VELOCITY);
 
 

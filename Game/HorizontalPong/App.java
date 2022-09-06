@@ -1,8 +1,8 @@
-package Game.HorizontalPong;
+package HorizontalPong;
 
 import javax.swing.*;
 
-class App {
+public class App {
 
     private static void initWindow() {
         JFrame window = new JFrame("Pong but you can move horizontally");
@@ -23,7 +23,7 @@ class App {
         // just know that when main runs it will call initWindow() once.
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                initWindow();
+                initWindow(); 
             }
         });
     }
